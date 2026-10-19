@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Ask Scholarship Questions - Scholarship Application Assistant{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Intro Banner -->
+    <section class="intro-card" aria-labelledby="chat-heading">
+        <h1 id="chat-heading" class="page-title">Scholarship Knowledge Assistant</h1>
+        <p class="intro-description">
+            Ask questions about scholarship rules, eligibility conditions, and application requirements. Answers are grounded directly in authoritative institutional documents.
+        </p>
+    </section>
+
+    <div class="chat-layout">
+        <!-- Interactive Question Panel -->
+        <section class="card question-card" aria-labelledby="ask-heading">
+            <h2 id="ask-heading" class="card-heading">
+                <span class="step-num">?</span> Ask a Question
+            </h2>
+
+            <!-- Demonstration Questions Quick-Pills -->
+            <div class="demo-section">
+                <span class="demo-label">Click a demonstration question to ask:</span>
+                <div class="demo-buttons">
+                    {% for demo_q in demo_questions %}
+                    <form method="POST" action="{{ url_for('chat') }}" class="demo-form">
+                        <input type="hidden" name="question" value="{{ demo_q }}">
+                        <button type="submit" class="btn btn-chip" title="Ask: {{ demo_q }}">
+                            💡 {{ demo_q }}
+                        </button>
+                    </form>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if error_message %}
+            <div class="alert alert-error" role="alert">
+                <span class="alert-icon" aria-hidden="true">⚠️</span>
+                <div class="alert-content">
+                    <p>{{ error_message }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Custom Question Form -->
+            <form method="POST" action="{{ url_for('chat') }}" class="chat-form" id="chatForm">
+                <div class="form-group">
+                    <label for="custom_question" class="form-label">Or Type Your Own Inquiry:</label>
+                    <textarea 
+                        id="custom_question" 
+                        name="question" 
+                        class="form-textarea" 
+                        rows="3" 
+                        placeholder="e.g. Which documents are required to apply for a scholarship?"
+                        required
+                    >{{ question }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="askBtn">
+                        <span class="btn-text">Ask Question</span>
+                        <span class="spinner hidden" id="askSpinner" aria-hidden="true"></span>
+                    </button>
+                    <a href="{{ url_for('chat') }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Answer / Grounding Panel -->
+        <section class="card answer-card" aria-labelledby="answer-heading">
+            <h2 id="answer-heading" class="card-heading">
+                <span class="step-num">💬</span> Grounded Answer
+            </h2>
+
+            {% if qa_result %}
+                <div class="answer-box" aria-live="polite">
+                    <div class="question-echo">
+                        <span class="echo-label">Inquiry:</span>
+                        <p class="echo-text">"{{ qa_result.question }}"</p>
+                    </div>
+
+                    <div class="answer-content">
+                        <span class="answer-label">Document-Grounded Response:</span>
+                        <p class="answer-text">{{ qa_result.answer }}</p>
+                    </div>
+
+                    <div class="sources-section">
+                        <span class="sources-label">Information Sources:</span>
+                        {% if qa_result.sources %}
+                            <div class="sources-tags">
+                                {% for src in qa_result.sources %}
+                                <span class="source-tag">📄 {{ src }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <span class="no-sources-text">None (Inquiry is out of scope or ungrounded)</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="disclaimer-box" role="note">
+                    <p class="disclaimer-text">
+                        ⚖️ <em>{{ disclaimer }}</em>
+                    </p>
+                </div>
+            {% else %}
+                <div class="initial-state-prompt">
+                    <div class="prompt-icon" aria-hidden="true">📖</div>
+                    <h3>Document Knowledge Base Ready</h3>
+                    <p>Select one of the demonstration questions above or type your inquiry to retrieve grounded answers from the institutional policy documents.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

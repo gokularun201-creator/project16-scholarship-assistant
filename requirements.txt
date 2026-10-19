@@ -1,0 +1,8 @@
+Flask>=3.0.0
+pytest>=8.0.0
+python-dotenv>=1.0.0
+
+# Optional external LLM & RAG integration (uncomment if using OpenAI API)
+# llama-index-core>=0.10.0
+# llama-index-llms-openai>=0.1.0
+# llama-index-embeddings-openai>=0.1.0

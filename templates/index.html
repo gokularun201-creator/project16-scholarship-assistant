@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Check Scholarship Eligibility - Scholarship Application Assistant{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Intro Banner -->
+    <section class="intro-card" aria-labelledby="intro-heading">
+        <h1 id="intro-heading" class="page-title">Find Your Scholarship Match</h1>
+        <p class="intro-description">
+            Enter your academic percentage, attendance rate, and annual family income to find matching scholarships and view recommendations based on merit and financial access rules.
+        </p>
+    </section>
+
+    <!-- Main Grid: Form & Results -->
+    <div class="checker-grid">
+        <!-- Form Section -->
+        <section class="card form-card" aria-labelledby="form-heading">
+            <h2 id="form-heading" class="card-heading">
+                <span class="step-num">1</span> Enter Your Student Profile
+            </h2>
+
+            {% if error_message %}
+            <div class="alert alert-error" role="alert">
+                <span class="alert-icon" aria-hidden="true">⚠️</span>
+                <div class="alert-content">
+                    <strong>Validation Error:</strong>
+                    <p>{{ error_message }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('index') }}" class="eligibility-form" id="eligibilityForm" novalidate>
+                <!-- Academic Percentage -->
+                <div class="form-group">
+                    <label for="academic_percentage" class="form-label">
+                        Academic Percentage (%) <span class="required-asterisk">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="number" 
+                            id="academic_percentage" 
+                            name="academic_percentage" 
+                            class="form-input" 
+                            placeholder="e.g. 88.5" 
+                            min="0" 
+                            max="100" 
+                            step="0.01" 
+                            required 
+                            value="{{ form_data.academic_percentage }}"
+                        >
+                        <span class="input-suffix">%</span>
+                    </div>
+                    <small class="form-hint">Enter your overall academic score (0 to 100).</small>
+                </div>
+
+                <!-- Attendance Percentage -->
+                <div class="form-group">
+                    <label for="attendance_percentage" class="form-label">
+                        Attendance Percentage (%) <span class="required-asterisk">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="number" 
+                            id="attendance_percentage" 
+                            name="attendance_percentage" 
+                            class="form-input" 
+                            placeholder="e.g. 92.0" 
+                            min="0" 
+                            max="100" 
+                            step="0.01" 
+                            required 
+                            value="{{ form_data.attendance_percentage }}"
+                        >
+                        <span class="input-suffix">%</span>
+                    </div>
+                    <small class="form-hint">Enter your verified attendance rate (0 to 100).</small>
+                </div>
+
+                <!-- Annual Family Income -->
+                <div class="form-group">
+                    <label for="annual_family_income" class="form-label">
+                        Annual Family Income (INR) <span class="required-asterisk">*</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">₹</span>
+                        <input 
+                            type="number" 
+                            id="annual_family_income" 
+                            name="annual_family_income" 
+                            class="form-input with-prefix" 
+                            placeholder="e.g. 180000" 
+                            min="0" 
+                            step="1" 
+                            required 
+                            value="{{ form_data.annual_family_income }}"
+                        >
+                    </div>
+                    <small class="form-hint">Enter total annual household income in Indian Rupees (non-negative).</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-text">Find scholarships</span>
+                        <span class="spinner hidden" id="btnSpinner" aria-hidden="true"></span>
+                    </button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Results Section -->
+        <section class="card results-card" aria-labelledby="results-heading">
+            <h2 id="results-heading" class="card-heading">
+                <span class="step-num">2</span> Eligibility Results
+            </h2>
+
+            {% if results is not none %}
+                {% if results.eligible_scholarships %}
+                    <!-- Recommendation Highlight Box -->
+                    <div class="recommendation-banner" aria-live="polite">
+                        <div class="banner-badge">★ Recommended Scholarship</div>
+                        <h3 class="recommended-title">{{ results.recommended_scholarship }}</h3>
+                        <p class="recommended-amount">
+                            Recommended Award: <strong>₹{{ "{:,}".format(results.recommended_award) }}</strong>
+                        </p>
+                        <p class="recommended-rationale">
+                            {% if results.eligible_scholarships|length > 1 %}
+                            You qualified for multiple scholarships. Under institutional policy, only one may be awarded; therefore, the scholarship with the highest award amount is recommended.
+                            {% else %}
+                            You meet all criteria for this scholarship award based on your academic profile.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <!-- List of All Eligible Scholarships -->
+                    <div class="scholarships-list">
+                        <h4 class="subheading">Matching Scholarships ({{ results.eligible_scholarships|length }})</h4>
+                        
+                        <div class="scholarship-cards-grid">
+                            {% for sch in results.eligible_scholarships %}
+                            <div class="scholarship-item {% if sch.name == results.recommended_scholarship %}is-recommended{% endif %}">
+                                <div class="item-header">
+                                    <h5 class="item-name">{{ sch.name }}</h5>
+                                    {% if sch.name == results.recommended_scholarship %}
+                                    <span class="pill pill-recommended">Highest Award</span>
+                                    {% else %}
+                                    <span class="pill pill-eligible">Eligible</span>
+                                    {% endif %}
+                                </div>
+                                <div class="item-award">
+                                    <span class="award-label">Award Value:</span>
+                                    <span class="award-value">₹{{ "{:,}".format(sch.award) }}</span>
+                                </div>
+                                <div class="item-criteria-check">
+                                    <span class="check-icon">✓</span> All criteria matched
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Friendly No-Match Message -->
+                    <div class="no-match-box" aria-live="polite">
+                        <div class="no-match-icon" aria-hidden="true">🔍</div>
+                        <h3 class="no-match-title">No Matching Scholarships Found</h3>
+                        <p class="no-match-text">
+                            None of the listed scholarships currently matches the supplied academic profile.
+                        </p>
+                        <div class="criteria-recap">
+                            <p><strong>Minimum Requirements for Reference:</strong></p>
+                            <ul>
+                                <li><strong>Merit Scholarship (₹15,000):</strong> Academic &ge; 85% and Attendance &ge; 90%.</li>
+                                <li><strong>Access Scholarship (₹10,000):</strong> Academic &ge; 60%, Attendance &ge; 75%, and Family Income &le; ₹2,50,000.</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Official Committee Disclaimer -->
+                <div class="disclaimer-box" role="note">
+                    <p class="disclaimer-text">
+                        ⚖️ <em>{{ disclaimer }}</em>
+                    </p>
+                </div>
+
+            {% else %}
+                <!-- Blank Initial State -->
+                <div class="initial-state-prompt">
+                    <div class="prompt-icon" aria-hidden="true">📊</div>
+                    <h3>Ready to Evaluate</h3>
+                    <p>Complete the student profile on the left and click <strong>"Find scholarships"</strong> to see your eligibility breakdown.</p>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

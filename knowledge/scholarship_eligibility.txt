@@ -1,0 +1,9 @@
+A student must meet every criterion for a scholarship.
+
+Students may qualify for both listed scholarships.
+
+However, only one scholarship may be awarded.
+
+When multiple scholarships match, the tool recommends the one with the higher award amount.
+
+Eligibility does not guarantee selection or payment.
