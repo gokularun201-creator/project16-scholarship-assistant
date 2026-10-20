@@ -1,167 +1,253 @@
 {% extends "base.html" %}
 
-{% block title %}Scholarship Knowledge Assistant — RAG Question Answering{% endblock %}
+{% block title %}Scholarship Application Assistant — Real-Time Knowledge Assistant (RAG){% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
-    <!-- Intro Hero Card -->
-    <section class="intro-hero" aria-labelledby="chat-heading">
-        <div class="intro-content">
-            <div class="intro-pill">
-                <span class="pill-dot"></span>
-                <span>Document-Grounded RAG &bull; Zero Hallucination Retrieval</span>
+    <!-- Hero Header -->
+    <section class="portal-hero" aria-labelledby="chat-title">
+        <div class="hero-left">
+            <div class="status-chip">
+                <span class="pulse-ring"></span>
+                <span>Document-Grounded RAG Engine Active</span>
             </div>
-            <h1 id="chat-heading" class="page-title">Scholarship Knowledge Assistant</h1>
-            <p class="intro-description">
-                Ask questions regarding scholarship regulations, eligibility rules, and required application paperwork. All answers are strictly grounded in the three authoritative institutional knowledge documents.
+            <h1 id="chat-title" class="portal-title">Scholarship Knowledge Assistant</h1>
+            <p class="portal-subtitle">
+                Ask any question regarding institutional scholarship rules, eligibility criteria, and required application documents. All inquiries are evaluated in real-time against the three authoritative policy documents.
             </p>
+            <div class="hero-feature-tags">
+                <span class="f-tag">⚡ Asynchronous Real-Time Chat</span>
+                <span class="f-tag">📄 Verifiable Citation Sources</span>
+                <span class="f-tag">🔒 Zero Hallucination Guardrails</span>
+            </div>
         </div>
-        <div class="doc-badges-group">
-            <span class="doc-badge" title="Authoritative catalog with award amounts and criteria">📄 Catalogue</span>
-            <span class="doc-badge" title="Rules regarding dual qualification and highest award recommendation">📄 Eligibility</span>
-            <span class="doc-badge" title="Required certificates and committee decision authority">📄 Application</span>
+
+        <div class="hero-right">
+            <div class="docs-status-card">
+                <div class="doc-status-header">
+                    <span class="d-header-title">Authoritative Knowledge Base</span>
+                    <button type="button" class="btn-inspect-docs" id="btnOpenDocsModal">
+                        <span>🔍 Inspect Documents</span>
+                    </button>
+                </div>
+                <div class="doc-pill-list">
+                    <div class="doc-pill-item">
+                        <span class="doc-icon">📄</span>
+                        <div class="doc-pill-text">
+                            <strong>scholarship_catalogue.txt</strong>
+                            <span>Merit &amp; Access Award Values and Thresholds</span>
+                        </div>
+                    </div>
+                    <div class="doc-pill-item">
+                        <span class="doc-icon">📄</span>
+                        <div class="doc-pill-text">
+                            <strong>scholarship_eligibility.txt</strong>
+                            <span>Dual Qualification &amp; Highest Award Directives</span>
+                        </div>
+                    </div>
+                    <div class="doc-pill-item">
+                        <span class="doc-icon">📄</span>
+                        <div class="doc-pill-text">
+                            <strong>scholarship_application.txt</strong>
+                            <span>Required Documentation &amp; Verification Rules</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <div class="chat-layout">
-        <!-- Interactive Question Panel -->
-        <section class="card question-card" aria-labelledby="ask-heading">
-            <div class="card-header-row">
-                <h2 id="ask-heading" class="card-heading">
-                    <span class="step-num">?</span>
-                    <span>Submit Inquiry</span>
-                </h2>
-                <span class="card-subtitle-badge">Grounding Query</span>
+    <!-- Chat & Grounding Workspace -->
+    <div class="chat-workspace-grid">
+        <!-- Main Interactive Chat Stream -->
+        <section class="card chat-card" aria-labelledby="chat-stream-heading">
+            <div class="card-header-bar">
+                <div class="card-title-group">
+                    <span class="step-badge">💬</span>
+                    <h2 id="chat-stream-heading" class="card-title">Real-Time Inquiry Stream</h2>
+                </div>
+                <div class="chat-header-actions">
+                    <button type="button" class="btn-action-sm" id="btnClearChat" title="Reset chat conversation">
+                        <span>Clear Chat</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Demonstration Questions Quick-Pills -->
-            <div class="demo-section">
-                <span class="demo-label">⚡ Benchmark Questions (Click to Ask):</span>
-                <div class="demo-buttons">
-                    {% for demo_q in demo_questions %}
-                    <form method="POST" action="{{ url_for('chat') }}" class="demo-form">
-                        <input type="hidden" name="question" value="{{ demo_q }}">
-                        <button type="submit" class="btn btn-chip" title="Click to ask this question immediately">
-                            <span class="chip-icon">
-                                {% if 'income certificate' in demo_q.lower() %}📑{% elif 'together' in demo_q.lower() %}⚖️{% else %}🏦{% endif %}
-                            </span>
-                            <span class="chip-text">{{ demo_q }}</span>
-                        </button>
-                    </form>
-                    {% endfor %}
+            <!-- Quick Inquiry Suggestions -->
+            <div class="prompt-chips-bar">
+                <span class="chips-title">Frequent Policy Questions:</span>
+                <div class="chips-flex">
+                    <button type="button" class="chip-q-btn" data-question="Which scholarship needs an income certificate?">
+                        📑 Which scholarship needs an income certificate?
+                    </button>
+                    <button type="button" class="chip-q-btn" data-question="Can both scholarships be awarded together?">
+                        ⚖️ Can both scholarships be awarded together?
+                    </button>
+                    <button type="button" class="chip-q-btn" data-question="When will money reach my bank account?">
+                        🏦 When will money reach my bank account?
+                    </button>
+                    <button type="button" class="chip-q-btn" data-question="What documents are required to apply?">
+                        📋 What documents are required to apply?
+                    </button>
                 </div>
+            </div>
+
+            <!-- Scrollable Chat Messages Container -->
+            <div class="chat-messages-container" id="chatMessages">
+                <!-- Initial Welcome Message from Assistant -->
+                <div class="message-row assistant-row">
+                    <div class="msg-avatar">🎓</div>
+                    <div class="msg-bubble assistant-bubble">
+                        <div class="msg-header">
+                            <strong class="msg-sender">SmartScholar Intelligence</strong>
+                            <span class="msg-timestamp">System</span>
+                        </div>
+                        <div class="msg-content">
+                            <p>Welcome! I answer questions grounded strictly in the three authoritative scholarship knowledge documents. You can type an inquiry below or click any of the policy questions above for an instant verified response.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- If server-rendered result from standard POST -->
+                {% if qa_result %}
+                <div class="message-row user-row">
+                    <div class="msg-bubble user-bubble">
+                        <div class="msg-header">
+                            <strong class="msg-sender">Applicant</strong>
+                        </div>
+                        <div class="msg-content">
+                            <p>{{ qa_result.question }}</p>
+                        </div>
+                    </div>
+                    <div class="msg-avatar user-avatar-icon">👤</div>
+                </div>
+
+                <div class="message-row assistant-row">
+                    <div class="msg-avatar">🎓</div>
+                    <div class="msg-bubble assistant-bubble">
+                        <div class="msg-header">
+                            <strong class="msg-sender">SmartScholar Intelligence</strong>
+                            <span class="msg-timestamp">Verified Grounded</span>
+                        </div>
+                        <div class="msg-content">
+                            <p id="serverAnswerText">{{ qa_result.answer }}</p>
+                        </div>
+                        <div class="msg-sources">
+                            <span class="sources-caption">Sources:</span>
+                            {% if qa_result.sources %}
+                                {% for src in qa_result.sources %}
+                                <span class="citation-pill">📄 {{ src }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="out-of-scope-pill">Out of Scope</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Typing indicator -->
+            <div class="typing-indicator-bar hidden" id="typingIndicator">
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="typing-text">Evaluating documents &amp; synthesizing grounded answer...</span>
             </div>
 
             {% if error_message %}
             <div class="alert alert-error" role="alert">
                 <span class="alert-icon" aria-hidden="true">⚠️</span>
                 <div class="alert-content">
-                    <strong class="alert-title">Query Error</strong>
-                    <p class="alert-text">{{ error_message }}</p>
+                    <p>{{ error_message }}</p>
                 </div>
             </div>
             {% endif %}
 
-            <!-- Custom Question Form -->
-            <form method="POST" action="{{ url_for('chat') }}" class="chat-form" id="chatForm">
-                <div class="form-group">
-                    <label for="custom_question" class="form-label">
-                        Enter Custom Question <span class="required-asterisk" aria-hidden="true">*</span>
-                    </label>
+            <!-- Chat Input Form -->
+            <form method="POST" action="{{ url_for('chat') }}" class="chat-composer-form" id="chatComposerForm">
+                <div class="composer-wrapper">
                     <textarea 
-                        id="custom_question" 
+                        id="questionInput" 
                         name="question" 
-                        class="form-textarea" 
-                        rows="3" 
-                        placeholder="e.g. Which documents are required to apply for a scholarship?"
+                        class="composer-textarea" 
+                        rows="2" 
+                        placeholder="Type a question about scholarship criteria, awards, or application documents..."
                         required
                     >{{ question }}</textarea>
-                    <small class="form-hint">Questions are matched against the local authoritative document corpus.</small>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="askBtn">
-                        <span class="btn-icon">💬</span>
-                        <span class="btn-text">Ask Question</span>
-                        <span class="spinner hidden" id="askSpinner" aria-hidden="true"></span>
+                    
+                    <button type="submit" class="btn btn-primary composer-submit-btn" id="sendBtn">
+                        <span class="btn-icon">➤</span>
+                        <span class="btn-text">Ask</span>
                     </button>
-                    <a href="{{ url_for('chat') }}" class="btn btn-secondary" title="Reset question">
-                        <span>Clear</span>
-                    </a>
                 </div>
             </form>
-        </section>
 
-        <!-- Answer / Grounding Panel -->
-        <section class="card answer-card" aria-labelledby="answer-heading">
-            <div class="card-header-row">
-                <h2 id="answer-heading" class="card-heading">
-                    <span class="step-num">💬</span>
-                    <span>Grounded Answer</span>
-                </h2>
-                <span class="card-subtitle-badge">Document Verified</span>
+            <!-- Policy Disclaimer -->
+            <div class="policy-disclaimer-box" role="note">
+                <span class="disclaimer-symbol" aria-hidden="true">⚖️</span>
+                <div class="disclaimer-details">
+                    <strong class="disclaimer-title">Statutory Regulatory Notice:</strong>
+                    <p class="disclaimer-body">{{ disclaimer }}</p>
+                </div>
             </div>
-
-            {% if qa_result %}
-                <div class="answer-box" aria-live="polite">
-                    <div class="question-echo">
-                        <span class="echo-label">Inquiry Submitted:</span>
-                        <p class="echo-text">"{{ qa_result.question }}"</p>
-                    </div>
-
-                    <div class="answer-content">
-                        <div class="answer-header-row">
-                            <span class="answer-label">Official Answer:</span>
-                            <button type="button" class="copy-answer-btn" id="copyBtn" title="Copy answer to clipboard">
-                                <span class="copy-icon">📋</span>
-                                <span class="copy-label">Copy</span>
-                            </button>
-                        </div>
-                        <p class="answer-text" id="answerText">{{ qa_result.answer }}</p>
-                    </div>
-
-                    <div class="sources-section">
-                        <span class="sources-label">Authoritative Sources:</span>
-                        {% if qa_result.sources %}
-                            <div class="sources-tags">
-                                {% for src in qa_result.sources %}
-                                <span class="source-tag">
-                                    <span class="source-icon">📄</span>
-                                    <span>{{ src }}</span>
-                                </span>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <div class="no-sources-box">
-                                <span class="out-of-scope-badge">Out of Scope</span>
-                                <span class="no-sources-text">Not referenced in institutional knowledge files.</span>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Policy Disclaimer -->
-                <div class="disclaimer-banner" role="note">
-                    <span class="disclaimer-icon" aria-hidden="true">⚖️</span>
-                    <div class="disclaimer-content">
-                        <strong>Official Policy Disclaimer:</strong>
-                        <p>{{ disclaimer }}</p>
-                    </div>
-                </div>
-            {% else %}
-                <div class="initial-prompt-card">
-                    <div class="initial-icon" aria-hidden="true">📖</div>
-                    <h3 class="initial-title">Knowledge Engine Ready</h3>
-                    <p class="initial-desc">
-                        Select one of the benchmark question chips above or type a custom question to retrieve a grounded, verified response from the scholarship policy documents.
-                    </p>
-                    <div class="demo-hints">
-                        <span class="demo-hints-title">Supported Topics:</span>
-                        <span>Income certificates, dual awards policy, application documents, award values.</span>
-                    </div>
-                </div>
-            {% endif %}
         </section>
+    </div>
+</div>
+
+<!-- ===========================================================================
+     AUTHORITATIVE DOCUMENTS INSPECTOR MODAL
+     =========================================================================== -->
+<div class="cert-modal-backdrop hidden" id="docsModal" role="dialog" aria-modal="true" aria-labelledby="docsModalTitle">
+    <div class="docs-modal-container">
+        <div class="docs-modal-header">
+            <div>
+                <h3 class="docs-modal-title" id="docsModalTitle">Authoritative Knowledge Documents</h3>
+                <span class="docs-modal-sub">Authoritative source files for all RAG responses</span>
+            </div>
+            <button type="button" class="btn btn-secondary" id="btnCloseDocsModal">Close</button>
+        </div>
+
+        <div class="docs-search-bar">
+            <input type="text" id="docSearchInput" class="text-input" placeholder="Search keywords across documents (e.g. income, 85, access)...">
+        </div>
+
+        <div class="docs-tabs-nav">
+            <button type="button" class="doc-tab-btn active" data-doc="catalogue">scholarship_catalogue.txt</button>
+            <button type="button" class="doc-tab-btn" data-doc="eligibility">scholarship_eligibility.txt</button>
+            <button type="button" class="doc-tab-btn" data-doc="application">scholarship_application.txt</button>
+        </div>
+
+        <div class="doc-content-viewer">
+            <!-- Document 1 -->
+            <pre class="doc-text-block active" id="docCatalogue">The Merit Scholarship offers INR 15000.
+
+It requires an academic percentage of at least 85 and attendance of at least 90 percent.
+
+The Access Scholarship offers INR 10000.
+
+It requires an academic percentage of at least 60, attendance of at least 75 percent, and annual family income not exceeding INR 250000.</pre>
+
+            <!-- Document 2 -->
+            <pre class="doc-text-block" id="docEligibility">A student must meet every criterion for a scholarship.
+
+Students may qualify for both listed scholarships.
+
+However, only one scholarship may be awarded.
+
+When multiple scholarships match, the tool recommends the one with the higher award amount.
+
+Eligibility does not guarantee selection or payment.</pre>
+
+            <!-- Document 3 -->
+            <pre class="doc-text-block" id="docApplication">Applications require the academic record, attendance statement, and student identification.
+
+An income certificate is additionally required for the Access Scholarship.
+
+The scholarship committee verifies applications and makes the final award decision.
+
+Do not upload personal documents into this classroom app.</pre>
+        </div>
     </div>
 </div>
 {% endblock %}

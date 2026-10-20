@@ -1,151 +1,231 @@
 {% extends "base.html" %}
 
-{% block title %}Scholarship Application Assistant — Evaluate Eligibility{% endblock %}
+{% block title %}Scholarship Application Assistant — Real-Time Eligibility Evaluator{% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
-    <!-- Intro Hero Card -->
-    <section class="intro-hero" aria-labelledby="intro-heading">
-        <div class="intro-content">
-            <div class="intro-pill">
-                <span class="pill-dot"></span>
-                <span>Deterministic Rules Engine &bull; Non-Persistent Verification</span>
+    <!-- Hero Header -->
+    <section class="portal-hero" aria-labelledby="hero-title">
+        <div class="hero-left">
+            <div class="status-chip">
+                <span class="pulse-ring"></span>
+                <span>Real-Time Evaluation Engine Active</span>
             </div>
-            <h1 id="intro-heading" class="page-title">Scholarship Eligibility Evaluator</h1>
-            <p class="intro-description">
-                Enter your academic percentage, attendance record, and annual family income to evaluate eligibility for institutional scholarships. Independent rule checking identifies all qualifying programs and recommends the highest award.
+            <h1 id="hero-title" class="portal-title">Scholarship Eligibility Evaluator</h1>
+            <p class="portal-subtitle">
+                Enter or adjust your academic score, verified attendance rate, and annual family income below. The deterministic engine evaluates both institutional schemes independently and recommends your maximum award value.
             </p>
-        </div>
-        <div class="hero-stats">
-            <div class="stat-badge">
-                <span class="stat-value">₹15,000</span>
-                <span class="stat-name">Merit Award</span>
+            <div class="hero-feature-tags">
+                <span class="f-tag">⚡ Live Instant Calculation</span>
+                <span class="f-tag">⚖️ Dual Qualification Logic</span>
+                <span class="f-tag">🔒 Zero PII Retention</span>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-badge">
-                <span class="stat-value">₹10,000</span>
-                <span class="stat-name">Access Award</span>
+        </div>
+
+        <div class="hero-right">
+            <div class="award-overview-card">
+                <span class="overview-title">Institutional Award Values</span>
+                <div class="overview-grid">
+                    <div class="overview-item merit-highlight">
+                        <div class="item-badge">🏆 Merit Program</div>
+                        <div class="item-amount">₹15,000</div>
+                        <div class="item-reqs">Academic &ge; 85% &bull; Attendance &ge; 90%</div>
+                    </div>
+                    <div class="overview-item access-highlight">
+                        <div class="item-badge">🤝 Access Program</div>
+                        <div class="item-amount">₹10,000</div>
+                        <div class="item-reqs">Acad &ge; 60% &bull; Att &ge; 75% &bull; Inc &le; ₹2.5L</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Grid: Form & Results -->
-    <div class="checker-grid">
-        <!-- Form Section -->
-        <section class="card form-card" aria-labelledby="form-heading">
-            <div class="card-header-row">
-                <h2 id="form-heading" class="card-heading">
-                    <span class="step-num">1</span>
-                    <span>Student Profile Input</span>
-                </h2>
-                <span class="card-subtitle-badge">Step 1 of 2</span>
+    <!-- Main Workspace Grid -->
+    <div class="workspace-grid">
+        <!-- Input & Controls Section -->
+        <section class="card input-card" aria-labelledby="input-heading">
+            <div class="card-header-bar">
+                <div class="card-title-group">
+                    <span class="step-badge">1</span>
+                    <h2 id="input-heading" class="card-title">Student Profile Metrics</h2>
+                </div>
+                <div class="realtime-toggle-wrapper">
+                    <label class="switch-label" for="liveCalcToggle">
+                        <span class="switch-text">Real-Time Sync</span>
+                        <input type="checkbox" id="liveCalcToggle" checked aria-label="Toggle real-time calculations">
+                        <span class="switch-slider"></span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Quick Preset Test Profiles -->
-            <div class="preset-section">
-                <span class="preset-label">⚡ Quick Presets (Click to Auto-Fill):</span>
-                <div class="preset-chips">
-                    <button type="button" class="preset-btn" data-acad="90" data-att="95" data-inc="200000" title="Qualifies for both Merit and Access">
-                        🏆 Both Match (90%, 95%, ₹2L)
+            <!-- Profile Presets -->
+            <div class="presets-toolbar">
+                <span class="toolbar-label">Quick Scenario Fill:</span>
+                <div class="presets-flex">
+                    <button type="button" class="preset-btn" data-acad="90" data-att="95" data-inc="200000" title="Both Merit & Access Match">
+                        🏆 Dual Match (90% / 95% / ₹2.0L)
                     </button>
-                    <button type="button" class="preset-btn" data-acad="70" data-att="80" data-inc="200000" title="Qualifies for Access only">
-                        🤝 Access Only (70%, 80%, ₹2L)
+                    <button type="button" class="preset-btn" data-acad="70" data-att="80" data-inc="200000" title="Access Scholarship Match Only">
+                        🤝 Access Only (70% / 80% / ₹2.0L)
                     </button>
-                    <button type="button" class="preset-btn" data-acad="88" data-att="92" data-inc="300000" title="Qualifies for Merit only (income > ₹2.5L)">
-                        ⭐ Merit Only (88%, 92%, ₹3L)
+                    <button type="button" class="preset-btn" data-acad="88" data-att="92" data-inc="300000" title="Merit Scholarship Match Only (Income > ₹2.5L)">
+                        ⭐ Merit Only (88% / 92% / ₹3.0L)
                     </button>
-                    <button type="button" class="preset-btn" data-acad="90" data-att="70" data-inc="100000" title="Does not meet attendance criteria">
-                        ❌ No Match (90%, 70%, ₹1L)
+                    <button type="button" class="preset-btn" data-acad="90" data-att="70" data-inc="100000" title="No matching criteria">
+                        ❌ Below Thresholds (90% / 70% / ₹1.0L)
                     </button>
                 </div>
             </div>
 
             {% if error_message %}
-            <div class="alert alert-error" role="alert">
+            <div class="alert alert-error" role="alert" id="serverErrorAlert">
                 <span class="alert-icon" aria-hidden="true">⚠️</span>
                 <div class="alert-content">
-                    <strong class="alert-title">Validation Error</strong>
+                    <strong class="alert-title">Input Validation Exception</strong>
                     <p class="alert-text">{{ error_message }}</p>
                 </div>
             </div>
             {% endif %}
 
-            <form method="POST" action="{{ url_for('index') }}" class="eligibility-form" id="eligibilityForm" novalidate>
+            <!-- Client-Side Realtime Error Alert -->
+            <div class="alert alert-error hidden" id="clientErrorAlert" role="alert">
+                <span class="alert-icon" aria-hidden="true">⚠️</span>
+                <div class="alert-content">
+                    <strong class="alert-title">Validation Error</strong>
+                    <p class="alert-text" id="clientErrorMessage"></p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('index') }}" class="evaluation-form" id="eligibilityForm" novalidate>
                 <!-- Academic Percentage -->
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="academic_percentage" class="form-label">
-                            Academic Percentage <span class="required-asterisk" aria-hidden="true">*</span>
+                <div class="form-field-group">
+                    <div class="field-label-row">
+                        <label for="academic_percentage" class="field-label">
+                            Academic Percentage <span class="req-star" aria-hidden="true">*</span>
                         </label>
-                        <span class="field-range-badge">0.00% &ndash; 100.00%</span>
+                        <span class="field-val-indicator" id="acadValDisplay">
+                            {{ form_data.academic_percentage if form_data.academic_percentage else '0' }}%
+                        </span>
                     </div>
-                    <div class="input-wrapper">
+
+                    <div class="dual-control-wrapper">
+                        <div class="input-with-adornment">
+                            <input 
+                                type="number" 
+                                id="academic_percentage" 
+                                name="academic_percentage" 
+                                class="text-input" 
+                                placeholder="e.g. 88.50" 
+                                min="0" 
+                                max="100" 
+                                step="0.01" 
+                                required 
+                                value="{{ form_data.academic_percentage }}"
+                                autocomplete="off"
+                            >
+                            <span class="adornment">%</span>
+                        </div>
                         <input 
-                            type="number" 
-                            id="academic_percentage" 
-                            name="academic_percentage" 
-                            class="form-input" 
-                            placeholder="e.g. 88.50" 
+                            type="range" 
+                            id="acadSlider" 
+                            class="range-slider" 
                             min="0" 
                             max="100" 
-                            step="0.01" 
-                            required 
-                            value="{{ form_data.academic_percentage }}"
-                            autocomplete="off"
+                            step="0.5" 
+                            value="{{ form_data.academic_percentage if form_data.academic_percentage else '75' }}"
+                            aria-label="Academic percentage slider"
                         >
-                        <span class="input-suffix">%</span>
                     </div>
-                    <div class="threshold-hints">
-                        <span class="hint-pill" id="hintAcadMerit">Merit &ge; 85%</span>
-                        <span class="hint-pill" id="hintAcadAccess">Access &ge; 60%</span>
+
+                    <!-- Live Criterion Thresholds -->
+                    <div class="criteria-meter-row">
+                        <div class="meter-chip" id="meterAcadAccess">
+                            <span class="meter-status">○</span>
+                            <span class="meter-text">Access Threshold (&ge; 60%)</span>
+                        </div>
+                        <div class="meter-chip" id="meterAcadMerit">
+                            <span class="meter-status">○</span>
+                            <span class="meter-text">Merit Threshold (&ge; 85%)</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Attendance Percentage -->
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="attendance_percentage" class="form-label">
-                            Attendance Percentage <span class="required-asterisk" aria-hidden="true">*</span>
+                <div class="form-field-group">
+                    <div class="field-label-row">
+                        <label for="attendance_percentage" class="field-label">
+                            Attendance Percentage <span class="req-star" aria-hidden="true">*</span>
                         </label>
-                        <span class="field-range-badge">0.00% &ndash; 100.00%</span>
+                        <span class="field-val-indicator" id="attValDisplay">
+                            {{ form_data.attendance_percentage if form_data.attendance_percentage else '0' }}%
+                        </span>
                     </div>
-                    <div class="input-wrapper">
+
+                    <div class="dual-control-wrapper">
+                        <div class="input-with-adornment">
+                            <input 
+                                type="number" 
+                                id="attendance_percentage" 
+                                name="attendance_percentage" 
+                                class="text-input" 
+                                placeholder="e.g. 92.00" 
+                                min="0" 
+                                max="100" 
+                                step="0.01" 
+                                required 
+                                value="{{ form_data.attendance_percentage }}"
+                                autocomplete="off"
+                            >
+                            <span class="adornment">%</span>
+                        </div>
                         <input 
-                            type="number" 
-                            id="attendance_percentage" 
-                            name="attendance_percentage" 
-                            class="form-input" 
-                            placeholder="e.g. 92.00" 
+                            type="range" 
+                            id="attSlider" 
+                            class="range-slider" 
                             min="0" 
                             max="100" 
-                            step="0.01" 
-                            required 
-                            value="{{ form_data.attendance_percentage }}"
-                            autocomplete="off"
+                            step="0.5" 
+                            value="{{ form_data.attendance_percentage if form_data.attendance_percentage else '85' }}"
+                            aria-label="Attendance percentage slider"
                         >
-                        <span class="input-suffix">%</span>
                     </div>
-                    <div class="threshold-hints">
-                        <span class="hint-pill" id="hintAttMerit">Merit &ge; 90%</span>
-                        <span class="hint-pill" id="hintAttAccess">Access &ge; 75%</span>
+
+                    <!-- Live Criterion Thresholds -->
+                    <div class="criteria-meter-row">
+                        <div class="meter-chip" id="meterAttAccess">
+                            <span class="meter-status">○</span>
+                            <span class="meter-text">Access Threshold (&ge; 75%)</span>
+                        </div>
+                        <div class="meter-chip" id="meterAttMerit">
+                            <span class="meter-status">○</span>
+                            <span class="meter-text">Merit Threshold (&ge; 90%)</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Annual Family Income -->
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="annual_family_income" class="form-label">
-                            Annual Family Income (INR) <span class="required-asterisk" aria-hidden="true">*</span>
+                <div class="form-field-group">
+                    <div class="field-label-row">
+                        <label for="annual_family_income" class="field-label">
+                            Annual Family Income (INR) <span class="req-star" aria-hidden="true">*</span>
                         </label>
-                        <span class="field-range-badge">Non-negative (&ge; 0)</span>
+                        <span class="field-val-indicator" id="incValDisplay">
+                            {% if form_data.annual_family_income %}
+                            ₹{{ "{:,}".format(form_data.annual_family_income|int) }}
+                            {% else %}
+                            ₹0
+                            {% endif %}
+                        </span>
                     </div>
-                    <div class="input-wrapper">
-                        <span class="input-prefix">₹</span>
+
+                    <div class="input-with-adornment prefix-mode">
+                        <span class="adornment-prefix">₹</span>
                         <input 
                             type="number" 
                             id="annual_family_income" 
                             name="annual_family_income" 
-                            class="form-input with-prefix" 
+                            class="text-input with-prefix" 
                             placeholder="e.g. 180000" 
                             min="0" 
                             step="1" 
@@ -154,86 +234,113 @@
                             autocomplete="off"
                         >
                     </div>
-                    <div class="threshold-hints">
-                        <span class="hint-pill" id="hintIncAccess">Access &le; ₹2,50,000</span>
-                        <span class="hint-pill hint-neutral">Merit: No Limit</span>
+
+                    <!-- Quick Increment Buttons -->
+                    <div class="quick-inc-buttons">
+                        <button type="button" class="inc-pill-btn" data-add="25000">+₹25,000</button>
+                        <button type="button" class="inc-pill-btn" data-add="50000">+₹50,000</button>
+                        <button type="button" class="inc-pill-btn" data-add="100000">+₹1,00,000</button>
+                        <button type="button" class="inc-pill-btn" data-set="250000">Max Access (₹2.5L)</button>
+                    </div>
+
+                    <!-- Live Criterion Thresholds -->
+                    <div class="criteria-meter-row">
+                        <div class="meter-chip" id="meterIncAccess">
+                            <span class="meter-status">○</span>
+                            <span class="meter-text">Access Ceiling (&le; ₹2,50,000)</span>
+                        </div>
+                        <div class="meter-chip hint-open" id="meterIncMerit">
+                            <span class="meter-status">✓</span>
+                            <span class="meter-text">Merit: Open to all incomes</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-actions">
+                <!-- Form Submit Actions -->
+                <div class="form-btn-row">
                     <button type="submit" class="btn btn-primary" id="submitBtn">
-                        <span class="btn-icon">🔍</span>
+                        <span class="btn-icon">⚡</span>
                         <span class="btn-text">Find scholarships</span>
                         <span class="spinner hidden" id="btnSpinner" aria-hidden="true"></span>
                     </button>
-                    <a href="{{ url_for('index') }}" class="btn btn-secondary" title="Reset all input fields">
-                        <span>Reset Form</span>
-                    </a>
+                    <button type="button" class="btn btn-secondary" id="resetBtn" title="Reset all input fields">
+                        <span>Reset All</span>
+                    </button>
                 </div>
             </form>
         </section>
 
-        <!-- Results Section -->
+        <!-- Evaluation Results Section -->
         <section class="card results-card" aria-labelledby="results-heading">
-            <div class="card-header-row">
-                <h2 id="results-heading" class="card-heading">
-                    <span class="step-num">2</span>
-                    <span>Evaluation Results</span>
-                </h2>
-                <span class="card-subtitle-badge">Deterministic Outcome</span>
+            <div class="card-header-bar">
+                <div class="card-title-group">
+                    <span class="step-badge">2</span>
+                    <h2 id="results-heading" class="card-title">Eligibility Determination</h2>
+                </div>
+                <div class="results-actions" id="resultsActionsBar">
+                    <button type="button" class="btn-action-sm" id="printCertBtn" title="Generate print-ready certificate">
+                        <span>🖨️ Generate Certificate</span>
+                    </button>
+                </div>
             </div>
 
+            <!-- Dynamic Results Container -->
+            <div id="resultsDisplayContainer">
             {% if results is not none %}
                 {% if results.eligible_scholarships %}
-                    <!-- Recommended Award Hero Card -->
-                    <div class="recommendation-hero" aria-live="polite">
-                        <div class="rec-badge-row">
-                            <span class="rec-crown">★</span>
-                            <span class="rec-badge-text">Recommended Scholarship</span>
-                            <span class="rec-tag">Highest Amount</span>
+                    <!-- Recommendation Card -->
+                    <div class="rec-banner-card" aria-live="polite">
+                        <div class="rec-badge-strip">
+                            <span class="rec-crown-icon">★</span>
+                            <span class="rec-headline">Recommended Scholarship</span>
+                            <span class="rec-pill-high">Optimal Award</span>
                         </div>
-                        <h3 class="recommended-title">{{ results.recommended_scholarship }}</h3>
-                        <div class="recommended-award-box">
-                            <span class="award-currency">INR</span>
-                            <span class="award-figure">₹{{ "{:,}".format(results.recommended_award) }}</span>
+                        
+                        <h3 class="rec-program-name">{{ results.recommended_scholarship }}</h3>
+                        
+                        <div class="rec-amount-row">
+                            <span class="curr-sign">INR</span>
+                            <span class="amount-number">₹{{ "{:,}".format(results.recommended_award) }}</span>
                         </div>
-                        <p class="recommended-rationale">
+
+                        <p class="rec-rationale-text">
                             {% if results.eligible_scholarships|length > 1 %}
-                            <strong>Dual Qualification:</strong> You qualify for both the Merit and Access scholarships. Because institutional guidelines permit only one award per student, the system recommends the scholarship with the higher monetary benefit.
+                            <strong>Dual Qualification Recognized:</strong> You satisfy the eligibility criteria for both the <strong>Merit Scholarship</strong> and <strong>Access Scholarship</strong>. Because institutional policy permits only one scholarship per recipient, the system recommends the program offering the higher financial award.
                             {% else %}
-                            <strong>Direct Match:</strong> You meet all criteria required for this scholarship according to institutional guidelines.
+                            <strong>Direct Matching:</strong> You have satisfied all institutional requirements for this scholarship based on verified student criteria.
                             {% endif %}
                         </p>
                     </div>
 
-                    <!-- Matching Scholarships Cards -->
-                    <div class="scholarships-breakdown">
-                        <h4 class="subheading">
-                            <span>All Qualifying Programs</span>
-                            <span class="count-badge">{{ results.eligible_scholarships|length }}</span>
+                    <!-- Matching Scholarships List -->
+                    <div class="matching-programs-section">
+                        <h4 class="matching-title">
+                            <span>Qualified Programs ({{ results.eligible_scholarships|length }})</span>
                         </h4>
-                        
-                        <div class="scholarship-cards-grid">
+
+                        <div class="programs-stack">
                             {% for sch in results.eligible_scholarships %}
-                            <div class="scholarship-item {% if sch.name == results.recommended_scholarship %}is-recommended{% endif %}">
-                                <div class="item-header">
-                                    <div class="item-title-group">
-                                        <span class="sch-icon">{% if 'Merit' in sch.name %}🏆{% else %}🤝{% endif %}</span>
-                                        <h5 class="item-name">{{ sch.name }}</h5>
+                            <div class="program-card-item {% if sch.name == results.recommended_scholarship %}is-optimal{% endif %}">
+                                <div class="prog-top">
+                                    <div class="prog-meta">
+                                        <span class="prog-icon">{% if 'Merit' in sch.name %}🏆{% else %}🤝{% endif %}</span>
+                                        <h5 class="prog-name">{{ sch.name }}</h5>
                                     </div>
                                     {% if sch.name == results.recommended_scholarship %}
-                                    <span class="pill pill-recommended">★ Recommended</span>
+                                    <span class="prog-status-pill optimal">★ Recommended</span>
                                     {% else %}
-                                    <span class="pill pill-eligible">✓ Eligible</span>
+                                    <span class="prog-status-pill eligible">✓ Eligible</span>
                                     {% endif %}
                                 </div>
-                                <div class="item-award">
-                                    <span class="award-label">Award Value</span>
-                                    <span class="award-value">₹{{ "{:,}".format(sch.award) }}</span>
-                                </div>
-                                <div class="item-status-note">
-                                    <span class="check-icon">✓</span>
-                                    <span>All eligibility conditions verified</span>
+                                <div class="prog-bottom">
+                                    <div class="prog-award">
+                                        <span class="p-label">Award Value:</span>
+                                        <strong class="p-val">₹{{ "{:,}".format(sch.award) }}</strong>
+                                    </div>
+                                    <div class="prog-verified">
+                                        <span class="v-icon">✓</span>
+                                        <span>Independent Criteria Satisfied</span>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -242,58 +349,178 @@
                 {% else %}
                     <!-- No Match Display -->
                     <div class="no-match-card" aria-live="polite">
-                        <div class="no-match-icon-circle" aria-hidden="true">
-                            <span>🔍</span>
-                        </div>
+                        <div class="no-match-badge" aria-hidden="true">🔍</div>
                         <h3 class="no-match-title">No Matching Scholarships Found</h3>
-                        <p class="no-match-text">
-                            Based on the criteria supplied, your profile does not currently qualify for either listed scholarship program.
+                        <p class="no-match-desc">
+                            None of the institutional scholarship programs currently match the supplied student metrics.
                         </p>
                         
-                        <div class="criteria-reference-card">
-                            <h4 class="ref-heading">Institutional Eligibility Rules for Comparison:</h4>
-                            <div class="ref-rule">
-                                <div class="ref-name">
-                                    <span class="ref-icon">🏆</span>
-                                    <strong>Merit Scholarship (₹15,000)</strong>
+                        <div class="benchmark-requirements-box">
+                            <span class="req-box-title">Required Institutional Thresholds:</span>
+                            <div class="req-rule-item">
+                                <span class="r-icon">🏆</span>
+                                <div class="r-body">
+                                    <strong>Merit Scholarship (₹15,000):</strong>
+                                    <span>Academic &ge; 85% AND Attendance &ge; 90% (Open to all income levels).</span>
                                 </div>
-                                <p class="ref-desc">Requires Academic &ge; 85.0% AND Attendance &ge; 90.0% (No income restriction).</p>
                             </div>
-                            <div class="ref-rule">
-                                <div class="ref-name">
-                                    <span class="ref-icon">🤝</span>
-                                    <strong>Access Scholarship (₹10,000)</strong>
+                            <div class="req-rule-item">
+                                <span class="r-icon">🤝</span>
+                                <div class="r-body">
+                                    <strong>Access Scholarship (₹10,000):</strong>
+                                    <span>Academic &ge; 60%, Attendance &ge; 75%, AND Annual Income &le; ₹2,50,000.</span>
                                 </div>
-                                <p class="ref-desc">Requires Academic &ge; 60.0%, Attendance &ge; 75.0%, AND Family Income &le; ₹2,50,000.</p>
                             </div>
                         </div>
                     </div>
                 {% endif %}
 
                 <!-- Official Committee Disclaimer -->
-                <div class="disclaimer-banner" role="note">
-                    <span class="disclaimer-icon" aria-hidden="true">⚖️</span>
-                    <div class="disclaimer-content">
-                        <strong>Official Policy Disclaimer:</strong>
-                        <p>{{ disclaimer }}</p>
+                <div class="policy-disclaimer-box" role="note">
+                    <span class="disclaimer-symbol" aria-hidden="true">⚖️</span>
+                    <div class="disclaimer-details">
+                        <strong class="disclaimer-title">Statutory Regulatory Notice:</strong>
+                        <p class="disclaimer-body">{{ disclaimer }}</p>
                     </div>
                 </div>
 
             {% else %}
-                <!-- Blank State Prompt -->
-                <div class="initial-prompt-card">
-                    <div class="initial-icon" aria-hidden="true">📋</div>
-                    <h3 class="initial-title">Ready for Evaluation</h3>
-                    <p class="initial-desc">
-                        Provide your academic metrics in the form to the left and select <strong>"Find scholarships"</strong> to evaluate your profile against the authoritative eligibility rules.
+                <!-- Blank Initial State -->
+                <div class="ready-evaluation-prompt">
+                    <div class="prompt-icon-ring" aria-hidden="true">📋</div>
+                    <h3 class="prompt-title">Engine Ready for Input</h3>
+                    <p class="prompt-body">
+                        Enter your academic metrics on the left or select a quick scenario preset. The system will evaluate your profile against the authoritative institutional guidelines in real-time.
                     </p>
-                    <div class="demo-hints">
-                        <span class="demo-hints-title">Quick Try:</span>
-                        <span>Click any preset button above to preview eligibility scenarios.</span>
+                    <div class="prompt-chips">
+                        <span class="p-chip-label">Supported Schemes:</span>
+                        <span class="p-chip">Merit Award (₹15,000)</span>
+                        <span class="p-chip">Access Award (₹10,000)</span>
                     </div>
                 </div>
             {% endif %}
+            </div>
         </section>
+    </div>
+</div>
+
+<!-- ===========================================================================
+     OFFICIAL PRINT / CERTIFICATE MODAL
+     =========================================================================== -->
+<div class="cert-modal-backdrop hidden" id="certModal" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">
+    <div class="cert-modal-container">
+        <div class="cert-modal-actions no-print">
+            <button type="button" class="btn btn-primary" id="btnExecutePrint">
+                <span>🖨️ Print / Save as PDF</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnCloseCertModal">
+                <span>Close</span>
+            </button>
+        </div>
+
+        <div class="official-certificate-sheet" id="printableCert">
+            <div class="cert-watermark" aria-hidden="true">SCHOLARSHIP VERIFIED</div>
+            
+            <div class="cert-header">
+                <div class="cert-logo-section">
+                    <span class="cert-crest">🎓</span>
+                    <div>
+                        <h2 class="cert-org" id="certModalTitle">INSTITUTIONAL SCHOLARSHIP BOARD</h2>
+                        <span class="cert-sub">Official Eligibility Determination Assessment Certificate</span>
+                    </div>
+                </div>
+                <div class="cert-ref-block">
+                    <span class="ref-label">VERIFICATION REFERENCE</span>
+                    <span class="ref-code" id="certRefNumber">SCH-2026-9812</span>
+                    <span class="ref-date" id="certIssueDate">Date: 2026-10-20</span>
+                </div>
+            </div>
+
+            <hr class="cert-divider">
+
+            <div class="cert-section">
+                <h3 class="cert-section-title">1. APPLICANT EVALUATED METRICS</h3>
+                <table class="cert-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Submitted Value</th>
+                            <th>Validation Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Academic Score</td>
+                            <td id="certAcadVal">88.50%</td>
+                            <td><span class="cert-pass">✓ Verified Finite Numeric</span></td>
+                        </tr>
+                        <tr>
+                            <td>Verified Attendance</td>
+                            <td id="certAttVal">92.00%</td>
+                            <td><span class="cert-pass">✓ Verified Non-Negative</span></td>
+                        </tr>
+                        <tr>
+                            <td>Annual Family Income</td>
+                            <td id="certIncVal">₹1,80,000</td>
+                            <td><span class="cert-pass">✓ Verified Non-Negative</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cert-section">
+                <h3 class="cert-section-title">2. ELIGIBILITY DETERMINATION MATRIX</h3>
+                <table class="cert-table">
+                    <thead>
+                        <tr>
+                            <th>Scholarship Program</th>
+                            <th>Statutory Criteria</th>
+                            <th>Status</th>
+                            <th>Award Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="certMatrixBody">
+                        <tr>
+                            <td>Merit Scholarship</td>
+                            <td>Academic &ge; 85% &amp; Attendance &ge; 90%</td>
+                            <td><span class="cert-pass">✓ ELIGIBLE</span></td>
+                            <td>₹15,000</td>
+                        </tr>
+                        <tr>
+                            <td>Access Scholarship</td>
+                            <td>Acad &ge; 60%, Att &ge; 75%, Inc &le; ₹2.5L</td>
+                            <td><span class="cert-pass">✓ ELIGIBLE</span></td>
+                            <td>₹10,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cert-recommendation-box" id="certRecBox">
+                <span class="cert-rec-label">OFFICIAL RECOMMENDATION:</span>
+                <h4 class="cert-rec-title" id="certRecTitle">Merit Scholarship</h4>
+                <p class="cert-rec-amount" id="certRecAmount">Recommended Award: <strong>₹15,000</strong></p>
+                <p class="cert-rec-policy" id="certRecPolicy">
+                    Under institutional regulations, when multiple scholarships match, the student is recommended the higher award amount. Awards are never combined.
+                </p>
+            </div>
+
+            <div class="cert-footer">
+                <p class="cert-statutory-notice">
+                    ⚖️ <strong>Regulatory Disclaimer:</strong> Eligibility does not guarantee selection or payment. The scholarship committee makes the final award decision.
+                </p>
+                <div class="cert-signatures">
+                    <div class="sig-block">
+                        <div class="sig-line"></div>
+                        <span>Automated Verification Engine</span>
+                    </div>
+                    <div class="sig-block">
+                        <div class="sig-line"></div>
+                        <span>Institutional Committee Chair</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
