@@ -2,6 +2,9 @@
 
 A complete, educational web application built with **Python**, **Flask**, and **RAG (Retrieval-Augmented Generation)** to evaluate student scholarship eligibility and answer institutional policy questions using authoritative knowledge documents.
 
+- **GitHub Repository**: [https://github.com/gokularun201-creator/project16-scholarship-assistant](https://github.com/gokularun201-creator/project16-scholarship-assistant)
+- **Live Interactive Web Portal (GitHub Pages)**: [https://gokularun201-creator.github.io/project16-scholarship-assistant/](https://gokularun201-creator.github.io/project16-scholarship-assistant/)
+
 > [!NOTE]
 > **Educational Demonstration**: This application uses fictional scholarship rules for classroom and demonstration purposes. It does not process actual scholarship payments, collect personal documents, or make official institutional award decisions.
 
@@ -12,6 +15,7 @@ A complete, educational web application built with **Python**, **Flask**, and **
 - [Scholarship Rules & Business Logic](#-scholarship-rules--business-logic)
 - [Technology Stack](#-technology-stack)
 - [Project Directory Structure](#-project-directory-structure)
+- [Live Web Portal & UI Enhancements](#-live-web-portal--ui-enhancements)
 - [Installation & Setup](#-installation--setup)
 - [Running the Application](#-running-the-application)
 - [API Endpoints](#-api-endpoints)
@@ -73,6 +77,10 @@ project16_scholarship_assistant/
 ├── .env.example                # Environment variables template
 ├── .gitignore                  # Git ignore rules
 ├── README.md                   # Complete documentation
+├── docs/                       # Live GitHub Pages interactive web application
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── knowledge/                  # Authoritative knowledge base
 │   ├── scholarship_catalogue.txt
 │   ├── scholarship_eligibility.txt

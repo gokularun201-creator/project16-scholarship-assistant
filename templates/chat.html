@@ -1,33 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}Ask Scholarship Questions - Scholarship Application Assistant{% endblock %}
+{% block title %}Scholarship Knowledge Assistant — RAG Question Answering{% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
-    <!-- Intro Banner -->
-    <section class="intro-card" aria-labelledby="chat-heading">
-        <h1 id="chat-heading" class="page-title">Scholarship Knowledge Assistant</h1>
-        <p class="intro-description">
-            Ask questions about scholarship rules, eligibility conditions, and application requirements. Answers are grounded directly in authoritative institutional documents.
-        </p>
+    <!-- Intro Hero Card -->
+    <section class="intro-hero" aria-labelledby="chat-heading">
+        <div class="intro-content">
+            <div class="intro-pill">
+                <span class="pill-dot"></span>
+                <span>Document-Grounded RAG &bull; Zero Hallucination Retrieval</span>
+            </div>
+            <h1 id="chat-heading" class="page-title">Scholarship Knowledge Assistant</h1>
+            <p class="intro-description">
+                Ask questions regarding scholarship regulations, eligibility rules, and required application paperwork. All answers are strictly grounded in the three authoritative institutional knowledge documents.
+            </p>
+        </div>
+        <div class="doc-badges-group">
+            <span class="doc-badge" title="Authoritative catalog with award amounts and criteria">📄 Catalogue</span>
+            <span class="doc-badge" title="Rules regarding dual qualification and highest award recommendation">📄 Eligibility</span>
+            <span class="doc-badge" title="Required certificates and committee decision authority">📄 Application</span>
+        </div>
     </section>
 
     <div class="chat-layout">
         <!-- Interactive Question Panel -->
         <section class="card question-card" aria-labelledby="ask-heading">
-            <h2 id="ask-heading" class="card-heading">
-                <span class="step-num">?</span> Ask a Question
-            </h2>
+            <div class="card-header-row">
+                <h2 id="ask-heading" class="card-heading">
+                    <span class="step-num">?</span>
+                    <span>Submit Inquiry</span>
+                </h2>
+                <span class="card-subtitle-badge">Grounding Query</span>
+            </div>
 
             <!-- Demonstration Questions Quick-Pills -->
             <div class="demo-section">
-                <span class="demo-label">Click a demonstration question to ask:</span>
+                <span class="demo-label">⚡ Benchmark Questions (Click to Ask):</span>
                 <div class="demo-buttons">
                     {% for demo_q in demo_questions %}
                     <form method="POST" action="{{ url_for('chat') }}" class="demo-form">
                         <input type="hidden" name="question" value="{{ demo_q }}">
-                        <button type="submit" class="btn btn-chip" title="Ask: {{ demo_q }}">
-                            💡 {{ demo_q }}
+                        <button type="submit" class="btn btn-chip" title="Click to ask this question immediately">
+                            <span class="chip-icon">
+                                {% if 'income certificate' in demo_q.lower() %}📑{% elif 'together' in demo_q.lower() %}⚖️{% else %}🏦{% endif %}
+                            </span>
+                            <span class="chip-text">{{ demo_q }}</span>
                         </button>
                     </form>
                     {% endfor %}
@@ -38,7 +56,8 @@
             <div class="alert alert-error" role="alert">
                 <span class="alert-icon" aria-hidden="true">⚠️</span>
                 <div class="alert-content">
-                    <p>{{ error_message }}</p>
+                    <strong class="alert-title">Query Error</strong>
+                    <p class="alert-text">{{ error_message }}</p>
                 </div>
             </div>
             {% endif %}
@@ -46,7 +65,9 @@
             <!-- Custom Question Form -->
             <form method="POST" action="{{ url_for('chat') }}" class="chat-form" id="chatForm">
                 <div class="form-group">
-                    <label for="custom_question" class="form-label">Or Type Your Own Inquiry:</label>
+                    <label for="custom_question" class="form-label">
+                        Enter Custom Question <span class="required-asterisk" aria-hidden="true">*</span>
+                    </label>
                     <textarea 
                         id="custom_question" 
                         name="question" 
@@ -55,60 +76,89 @@
                         placeholder="e.g. Which documents are required to apply for a scholarship?"
                         required
                     >{{ question }}</textarea>
+                    <small class="form-hint">Questions are matched against the local authoritative document corpus.</small>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary" id="askBtn">
+                        <span class="btn-icon">💬</span>
                         <span class="btn-text">Ask Question</span>
                         <span class="spinner hidden" id="askSpinner" aria-hidden="true"></span>
                     </button>
-                    <a href="{{ url_for('chat') }}" class="btn btn-secondary">Reset</a>
+                    <a href="{{ url_for('chat') }}" class="btn btn-secondary" title="Reset question">
+                        <span>Clear</span>
+                    </a>
                 </div>
             </form>
         </section>
 
         <!-- Answer / Grounding Panel -->
         <section class="card answer-card" aria-labelledby="answer-heading">
-            <h2 id="answer-heading" class="card-heading">
-                <span class="step-num">💬</span> Grounded Answer
-            </h2>
+            <div class="card-header-row">
+                <h2 id="answer-heading" class="card-heading">
+                    <span class="step-num">💬</span>
+                    <span>Grounded Answer</span>
+                </h2>
+                <span class="card-subtitle-badge">Document Verified</span>
+            </div>
 
             {% if qa_result %}
                 <div class="answer-box" aria-live="polite">
                     <div class="question-echo">
-                        <span class="echo-label">Inquiry:</span>
+                        <span class="echo-label">Inquiry Submitted:</span>
                         <p class="echo-text">"{{ qa_result.question }}"</p>
                     </div>
 
                     <div class="answer-content">
-                        <span class="answer-label">Document-Grounded Response:</span>
-                        <p class="answer-text">{{ qa_result.answer }}</p>
+                        <div class="answer-header-row">
+                            <span class="answer-label">Official Answer:</span>
+                            <button type="button" class="copy-answer-btn" id="copyBtn" title="Copy answer to clipboard">
+                                <span class="copy-icon">📋</span>
+                                <span class="copy-label">Copy</span>
+                            </button>
+                        </div>
+                        <p class="answer-text" id="answerText">{{ qa_result.answer }}</p>
                     </div>
 
                     <div class="sources-section">
-                        <span class="sources-label">Information Sources:</span>
+                        <span class="sources-label">Authoritative Sources:</span>
                         {% if qa_result.sources %}
                             <div class="sources-tags">
                                 {% for src in qa_result.sources %}
-                                <span class="source-tag">📄 {{ src }}</span>
+                                <span class="source-tag">
+                                    <span class="source-icon">📄</span>
+                                    <span>{{ src }}</span>
+                                </span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <span class="no-sources-text">None (Inquiry is out of scope or ungrounded)</span>
+                            <div class="no-sources-box">
+                                <span class="out-of-scope-badge">Out of Scope</span>
+                                <span class="no-sources-text">Not referenced in institutional knowledge files.</span>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
 
-                <div class="disclaimer-box" role="note">
-                    <p class="disclaimer-text">
-                        ⚖️ <em>{{ disclaimer }}</em>
-                    </p>
+                <!-- Policy Disclaimer -->
+                <div class="disclaimer-banner" role="note">
+                    <span class="disclaimer-icon" aria-hidden="true">⚖️</span>
+                    <div class="disclaimer-content">
+                        <strong>Official Policy Disclaimer:</strong>
+                        <p>{{ disclaimer }}</p>
+                    </div>
                 </div>
             {% else %}
-                <div class="initial-state-prompt">
-                    <div class="prompt-icon" aria-hidden="true">📖</div>
-                    <h3>Document Knowledge Base Ready</h3>
-                    <p>Select one of the demonstration questions above or type your inquiry to retrieve grounded answers from the institutional policy documents.</p>
+                <div class="initial-prompt-card">
+                    <div class="initial-icon" aria-hidden="true">📖</div>
+                    <h3 class="initial-title">Knowledge Engine Ready</h3>
+                    <p class="initial-desc">
+                        Select one of the benchmark question chips above or type a custom question to retrieve a grounded, verified response from the scholarship policy documents.
+                    </p>
+                    <div class="demo-hints">
+                        <span class="demo-hints-title">Supported Topics:</span>
+                        <span>Income certificates, dual awards policy, application documents, award values.</span>
+                    </div>
                 </div>
             {% endif %}
         </section>

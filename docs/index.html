@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarship Application Assistant — Live Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .live-deployment-banner {
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            color: #ffffff;
+            font-size: 0.8125rem;
+            padding: 8px 16px;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .live-deployment-banner a {
+            color: #fde047;
+            text-decoration: underline;
+            font-weight: 700;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Live GitHub Pages Banner -->
+    <div class="live-deployment-banner">
+        <span>🌐 <strong>Live GitHub Pages Deployment:</strong> Fully interactive static portal backed by the <a href="https://github.com/gokularun201-creator/project16-scholarship-assistant" target="_blank">Python Flask &amp; LlamaIndex GitHub Repository</a></span>
+    </div>
+
+    <!-- Site Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="#" class="brand-identity" id="brandHomeLink">
+                <span class="brand-icon" aria-hidden="true">🎓</span>
+                <div class="brand-text">
+                    <span class="brand-title">Scholarship Assistant</span>
+                    <span class="brand-subtitle">Educational Evaluation Portal</span>
+                </div>
+            </a>
+            <div class="header-right">
+                <nav class="nav-links" aria-label="Main Navigation">
+                    <button type="button" class="nav-item active" id="tabBtnChecker">
+                        <span class="nav-icon">📋</span>
+                        <span>Eligibility Checker</span>
+                    </button>
+                    <button type="button" class="nav-item" id="tabBtnChat">
+                        <span class="nav-icon">💬</span>
+                        <span>Ask Questions (RAG)</span>
+                    </button>
+                </nav>
+                <button type="button" class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle color theme">
+                    <span class="theme-icon light-icon" aria-hidden="true">☀️</span>
+                    <span class="theme-icon dark-icon" aria-hidden="true">🌙</span>
+                </button>
+                <a href="https://github.com/gokularun201-creator/project16-scholarship-assistant" target="_blank" rel="noopener noreferrer" class="github-badge-btn" title="View Source on GitHub">
+                    <svg class="gh-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <!-- ===================================================================
+             TAB 1: ELIGIBILITY CHECKER
+             =================================================================== -->
+        <div class="tab-panel active" id="panelChecker">
+            <div class="content-wrapper">
+                <!-- Intro Hero Card -->
+                <section class="intro-hero" aria-labelledby="intro-heading">
+                    <div class="intro-content">
+                        <div class="intro-pill">
+                            <span class="pill-dot"></span>
+                            <span>Deterministic Rules Engine &bull; Non-Persistent Verification</span>
+                        </div>
+                        <h1 id="intro-heading" class="page-title">Scholarship Eligibility Evaluator</h1>
+                        <p class="intro-description">
+                            Enter your academic percentage, attendance record, and annual family income to evaluate eligibility for institutional scholarships. Independent rule checking identifies all qualifying programs and recommends the highest award.
+                        </p>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-badge">
+                            <span class="stat-value">₹15,000</span>
+                            <span class="stat-name">Merit Award</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-badge">
+                            <span class="stat-value">₹10,000</span>
+                            <span class="stat-name">Access Award</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="checker-grid">
+                    <!-- Form Section -->
+                    <section class="card form-card" aria-labelledby="form-heading">
+                        <div class="card-header-row">
+                            <h2 id="form-heading" class="card-heading">
+                                <span class="step-num">1</span>
+                                <span>Student Profile Input</span>
+                            </h2>
+                            <span class="card-subtitle-badge">Step 1 of 2</span>
+                        </div>
+
+                        <!-- Quick Presets -->
+                        <div class="preset-section">
+                            <span class="preset-label">⚡ Quick Presets (Click to Auto-Fill):</span>
+                            <div class="preset-chips">
+                                <button type="button" class="preset-btn" data-acad="90" data-att="95" data-inc="200000">
+                                    🏆 Both Match (90%, 95%, ₹2L)
+                                </button>
+                                <button type="button" class="preset-btn" data-acad="70" data-att="80" data-inc="200000">
+                                    🤝 Access Only (70%, 80%, ₹2L)
+                                </button>
+                                <button type="button" class="preset-btn" data-acad="88" data-att="92" data-inc="300000">
+                                    ⭐ Merit Only (88%, 92%, ₹3L)
+                                </button>
+                                <button type="button" class="preset-btn" data-acad="90" data-att="70" data-inc="100000">
+                                    ❌ No Match (90%, 70%, ₹1L)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Error Alert Container -->
+                        <div class="alert alert-error hidden" id="clientErrorAlert" role="alert">
+                            <span class="alert-icon" aria-hidden="true">⚠️</span>
+                            <div class="alert-content">
+                                <strong class="alert-title">Validation Error</strong>
+                                <p class="alert-text" id="clientErrorMessage"></p>
+                            </div>
+                        </div>
+
+                        <form class="eligibility-form" id="eligibilityStaticForm" novalidate>
+                            <!-- Academic Percentage -->
+                            <div class="form-group">
+                                <div class="label-row">
+                                    <label for="acad_input" class="form-label">
+                                        Academic Percentage <span class="required-asterisk" aria-hidden="true">*</span>
+                                    </label>
+                                    <span class="field-range-badge">0.00% &ndash; 100.00%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="acad_input" 
+                                        class="form-input" 
+                                        placeholder="e.g. 88.50" 
+                                        min="0" 
+                                        max="100" 
+                                        step="0.01" 
+                                        required 
+                                        autocomplete="off"
+                                    >
+                                    <span class="input-suffix">%</span>
+                                </div>
+                                <div class="threshold-hints">
+                                    <span class="hint-pill" id="hAcadMerit">Merit &ge; 85%</span>
+                                    <span class="hint-pill" id="hAcadAccess">Access &ge; 60%</span>
+                                </div>
+                            </div>
+
+                            <!-- Attendance Percentage -->
+                            <div class="form-group">
+                                <div class="label-row">
+                                    <label for="att_input" class="form-label">
+                                        Attendance Percentage <span class="required-asterisk" aria-hidden="true">*</span>
+                                    </label>
+                                    <span class="field-range-badge">0.00% &ndash; 100.00%</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="number" 
+                                        id="att_input" 
+                                        class="form-input" 
+                                        placeholder="e.g. 92.00" 
+                                        min="0" 
+                                        max="100" 
+                                        step="0.01" 
+                                        required 
+                                        autocomplete="off"
+                                    >
+                                    <span class="input-suffix">%</span>
+                                </div>
+                                <div class="threshold-hints">
+                                    <span class="hint-pill" id="hAttMerit">Merit &ge; 90%</span>
+                                    <span class="hint-pill" id="hAttAccess">Access &ge; 75%</span>
+                                </div>
+                            </div>
+
+                            <!-- Annual Family Income -->
+                            <div class="form-group">
+                                <div class="label-row">
+                                    <label for="inc_input" class="form-label">
+                                        Annual Family Income (INR) <span class="required-asterisk" aria-hidden="true">*</span>
+                                    </label>
+                                    <span class="field-range-badge">Non-negative (&ge; 0)</span>
+                                </div>
+                                <div class="input-wrapper">
+                                    <span class="input-prefix">₹</span>
+                                    <input 
+                                        type="number" 
+                                        id="inc_input" 
+                                        class="form-input with-prefix" 
+                                        placeholder="e.g. 180000" 
+                                        min="0" 
+                                        step="1" 
+                                        required 
+                                        autocomplete="off"
+                                    >
+                                </div>
+                                <div class="threshold-hints">
+                                    <span class="hint-pill" id="hIncAccess">Access &le; ₹2,50,000</span>
+                                    <span class="hint-pill hint-neutral">Merit: No Limit</span>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="btnFindScholarships">
+                                    <span class="btn-icon">🔍</span>
+                                    <span class="btn-text">Find scholarships</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="btnResetForm">
+                                    <span>Reset Form</span>
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Results Section -->
+                    <section class="card results-card" aria-labelledby="results-heading">
+                        <div class="card-header-row">
+                            <h2 id="results-heading" class="card-heading">
+                                <span class="step-num">2</span>
+                                <span>Evaluation Results</span>
+                            </h2>
+                            <span class="card-subtitle-badge">Deterministic Outcome</span>
+                        </div>
+
+                        <!-- Results Container (Dynamically rendered) -->
+                        <div id="resultsContainer">
+                            <div class="initial-prompt-card">
+                                <div class="initial-icon" aria-hidden="true">📋</div>
+                                <h3 class="initial-title">Ready for Evaluation</h3>
+                                <p class="initial-desc">
+                                    Provide your academic metrics in the form to the left and select <strong>"Find scholarships"</strong> to evaluate your profile against the authoritative eligibility rules.
+                                </p>
+                                <div class="demo-hints">
+                                    <span class="demo-hints-title">Quick Try:</span>
+                                    <span>Click any preset button above to preview eligibility scenarios.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Official Committee Disclaimer -->
+                        <div class="disclaimer-banner" role="note">
+                            <span class="disclaimer-icon" aria-hidden="true">⚖️</span>
+                            <div class="disclaimer-content">
+                                <strong>Official Policy Disclaimer:</strong>
+                                <p>Eligibility does not guarantee selection or payment. The scholarship committee makes the final award decision.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================
+             TAB 2: KNOWLEDGE ASSISTANT (RAG)
+             =================================================================== -->
+        <div class="tab-panel" id="panelChat">
+            <div class="content-wrapper">
+                <!-- Intro Hero Card -->
+                <section class="intro-hero" aria-labelledby="chat-heading">
+                    <div class="intro-content">
+                        <div class="intro-pill">
+                            <span class="pill-dot"></span>
+                            <span>Document-Grounded RAG &bull; Zero Hallucination Retrieval</span>
+                        </div>
+                        <h1 id="chat-heading" class="page-title">Scholarship Knowledge Assistant</h1>
+                        <p class="intro-description">
+                            Ask questions regarding scholarship regulations, eligibility rules, and required application paperwork. All answers are strictly grounded in the three authoritative institutional knowledge documents.
+                        </p>
+                    </div>
+                    <div class="doc-badges-group">
+                        <span class="doc-badge" title="Authoritative catalog with award amounts and criteria">📄 Catalogue</span>
+                        <span class="doc-badge" title="Rules regarding dual qualification and highest award recommendation">📄 Eligibility</span>
+                        <span class="doc-badge" title="Required certificates and committee decision authority">📄 Application</span>
+                    </div>
+                </section>
+
+                <div class="chat-layout">
+                    <!-- Inquiry Section -->
+                    <section class="card question-card" aria-labelledby="ask-heading">
+                        <div class="card-header-row">
+                            <h2 id="ask-heading" class="card-heading">
+                                <span class="step-num">?</span>
+                                <span>Submit Inquiry</span>
+                            </h2>
+                            <span class="card-subtitle-badge">Grounding Query</span>
+                        </div>
+
+                        <!-- Benchmark Demonstration Questions -->
+                        <div class="demo-section">
+                            <span class="demo-label">⚡ Benchmark Questions (Click to Ask):</span>
+                            <div class="demo-buttons">
+                                <button type="button" class="btn btn-chip demo-q-btn" data-q="Which scholarship needs an income certificate?">
+                                    <span class="chip-icon">📑</span>
+                                    <span class="chip-text">Which scholarship needs an income certificate?</span>
+                                </button>
+                                <button type="button" class="btn btn-chip demo-q-btn" data-q="Can both scholarships be awarded together?">
+                                    <span class="chip-icon">⚖️</span>
+                                    <span class="chip-text">Can both scholarships be awarded together?</span>
+                                </button>
+                                <button type="button" class="btn btn-chip demo-q-btn" data-q="When will money reach my bank account?">
+                                    <span class="chip-icon">🏦</span>
+                                    <span class="chip-text">When will money reach my bank account?</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <form class="chat-form" id="chatStaticForm">
+                            <div class="form-group">
+                                <label for="chat_input" class="form-label">
+                                    Enter Custom Question <span class="required-asterisk" aria-hidden="true">*</span>
+                                </label>
+                                <textarea 
+                                    id="chat_input" 
+                                    class="form-textarea" 
+                                    rows="3" 
+                                    placeholder="e.g. Which documents are required to apply for a scholarship?"
+                                    required
+                                ></textarea>
+                                <small class="form-hint">Queries are evaluated against the three authoritative scholarship files.</small>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="btnAskStatic">
+                                    <span class="btn-icon">💬</span>
+                                    <span class="btn-text">Ask Question</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="btnResetChat">
+                                    <span>Clear</span>
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Answer Section -->
+                    <section class="card answer-card" aria-labelledby="answer-heading">
+                        <div class="card-header-row">
+                            <h2 id="answer-heading" class="card-heading">
+                                <span class="step-num">💬</span>
+                                <span>Grounded Answer</span>
+                            </h2>
+                            <span class="card-subtitle-badge">Document Verified</span>
+                        </div>
+
+                        <div id="chatAnswerContainer">
+                            <div class="initial-prompt-card">
+                                <div class="initial-icon" aria-hidden="true">📖</div>
+                                <h3 class="initial-title">Knowledge Engine Ready</h3>
+                                <p class="initial-desc">
+                                    Select one of the benchmark question chips above or type a custom question to retrieve a grounded, verified response from the scholarship policy documents.
+                                </p>
+                                <div class="demo-hints">
+                                    <span class="demo-hints-title">Supported Topics:</span>
+                                    <span>Income certificates, dual awards policy, application documents, award values.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Policy Disclaimer -->
+                        <div class="disclaimer-banner" role="note">
+                            <span class="disclaimer-icon" aria-hidden="true">⚖️</span>
+                            <div class="disclaimer-content">
+                                <strong>Official Policy Disclaimer:</strong>
+                                <p>Eligibility does not guarantee selection or payment. The scholarship committee makes the final award decision.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <span class="brand-icon">🎓</span>
+                        <strong>Scholarship Assistant</strong>
+                    </div>
+                    <p class="educational-notice">
+                        Educational classroom application demonstrating deterministic eligibility verification, strict validation, and document-grounded RAG retrieval.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Authoritative Documents</h4>
+                    <ul class="footer-links">
+                        <li><code>scholarship_catalogue.txt</code> (Merit & Access)</li>
+                        <li><code>scholarship_eligibility.txt</code> (Policy Rules)</li>
+                        <li><code>scholarship_application.txt</code> (Required Documents)</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Project Compliance</h4>
+                    <p class="compliance-note">
+                        Deterministic Python Engine &bull; Non-persistent inputs &bull; 37 Automated Unit Tests Passing.
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy; 2026 Scholarship Application Assistant &bull; Open-source on GitHub
+                </p>
+                <div class="footer-tags">
+                    <span class="tech-tag">Python 3.11</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">LlamaIndex RAG</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
